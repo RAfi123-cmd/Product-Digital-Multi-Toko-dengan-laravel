@@ -5,20 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProductCategory extends Model
+
+class Subscription extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'user_id',
-        'name',
-        'slug'
+        'end_date',
+        'is_active'
     ];
+
     public function user(){
         return $this->belongsTo(User::class);
     }
-
-    public function products(){
-        return $this->hasMany(Product::class);
+    
+    public function subscriptionPayment(){
+        return  $this->hasOne(SubscriptionPayment::class);
     }
 }

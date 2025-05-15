@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('subscription_payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->string('slug');
+            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
+            $table->string('proof');
+            $table->enum('status', ['pending', 'success', 'failed'])-> default('pending');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('subscription_payments');
     }
 };
