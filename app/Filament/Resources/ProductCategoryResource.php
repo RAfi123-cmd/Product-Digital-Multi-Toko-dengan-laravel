@@ -47,6 +47,9 @@ class ProductCategoryResource extends Resource
                 Forms\Components\TextInput::make('name')
                 ->label('Nama Kategori')
                 ->required(),
+                Forms\Components\FileUpload::make('icon')
+                ->label('Ikon Kategori')
+                ->required(),
             ]);
     }
 
@@ -58,7 +61,9 @@ class ProductCategoryResource extends Resource
                     ->label('Nama Toko')
                     ->hidden(fn() => Auth::user()->role === 'store'),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama Kategori')
+                    ->label('Nama Kategori'),
+                Tables\Columns\ImageColumn::make('icon')
+                    ->label('Ikon Kategori')
                 
             ])
             ->filters([

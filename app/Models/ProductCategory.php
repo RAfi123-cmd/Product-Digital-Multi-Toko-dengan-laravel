@@ -14,7 +14,8 @@ class ProductCategory extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'slug'
+        'slug',
+        'icon'
     ];
 
     public static function boot(){

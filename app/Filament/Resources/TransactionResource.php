@@ -25,6 +25,17 @@ class TransactionResource extends Resource
 
     protected static ?string $navigationLabel = 'Manajemen Transaksi';
 
+    public static function getEloquentQuery(): Builder
+    {
+        $user = Auth::user();
+
+        if($user->role === 'admin'){
+            return parent::getEloquentQuery();
+        }
+
+        return parent::getEloquentQuery()->where('user_id', $user->id);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -42,6 +53,9 @@ class TransactionResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->label('Nama Costumer')
+                    ->required(),
+                Forms\Components\TextInput::make('phone_number')
+                    ->label('Nomor HP Costumer')
                     ->required(),
                 Forms\Components\TextInput::make('table_number')
                     ->label('Nomor Meja')
@@ -107,6 +121,8 @@ class TransactionResource extends Resource
                     ->label('Kode Transaksi'),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Name Costumer'),
+                Tables\Columns\TextColumn::make('phone_number')
+                    ->label('Nomor HP Costumer'),
                 Tables\Columns\TextColumn::make('table_number')
                     ->label('Nomor Meja'),
                 Tables\Columns\TextColumn::make('payment_method')

@@ -16,7 +16,9 @@ class Product extends Model
         'image',
         'name',
         'description',
-        'price'
+        'price',
+        'rating',
+        'is_popular'
     ];
 
     protected $casts = [
@@ -45,6 +47,10 @@ class Product extends Model
     }
     public function productCategory(){
         return $this->belongsTo(ProductCategory::class);
+    }
+
+    public function productIngredients(){
+        return $this->hasMany(ProductIngredient::class);
     }
 
     public function transactionDetails(){

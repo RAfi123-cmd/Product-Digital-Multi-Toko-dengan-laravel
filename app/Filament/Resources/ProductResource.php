@@ -105,6 +105,21 @@ class ProductResource extends Resource
                 ->label('Harga Menu')
                 ->numeric()
                 ->required(),
+                Forms\Components\TextInput::make('rating')
+                ->label('Rating Menu')
+                ->numeric()
+                ->required(),
+                Forms\Components\Toggle::make('is_popular')
+                ->label('Populer Menu')
+                ->required(),
+                Forms\Components\Repeater::make('productIngredients')
+                ->label('Bahan Baku Menu')
+                ->relationship('productIngredients')
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                    ->label('Nama Bahan')
+                    ->required(),
+                ])->columnSpanFull()
                 
             ]);
     }
@@ -116,6 +131,8 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Nama Toko')
                     ->hidden(fn() => Auth::user()->role === 'store'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Menu'),
                 Tables\Columns\TextColumn::make('productCategory.name')
                     ->label('Kategori Menu'),
                 Tables\Columns\ImageColumn::make('image')
@@ -124,7 +141,11 @@ class ProductResource extends Resource
                     ->label('Harga Menu')
                     ->formatStateUsing(function (string $state){
                         return 'Rp ' . number_format($state);
-                    }) ,
+                    }),
+                Tables\Columns\TextColumn::make('rating')
+                    ->label('Rating Menu'),
+                Tables\Columns\ToggleColumn::make('is_popular')
+                    ->label('Populer Menu'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
