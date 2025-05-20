@@ -39,7 +39,7 @@
             <div class="swiper w-full">
                 <div class="swiper-wrapper mt-[20px]">
                     @foreach ($store->productCategories as $category)
-                        <a href="#" class="swiper-slide !w-fit">
+                        <a href="{{ route('product.find-results', $store->username) . '?category=' . $category->slug }}" class="swiper-slide !w-fit">
                             <div class="flex flex-col items-center shrink-0 gap-2 text-center">
                                 <div
                                     class="w-[64px] h-[64px] rounded-full flex shrink-0 overflow-hidden p-4 bg-[#9393931A] bg-opacity-10">
