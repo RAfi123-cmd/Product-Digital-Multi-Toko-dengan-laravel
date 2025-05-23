@@ -9,30 +9,33 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function cart(Request $request){
+    public function cart(Request $request)
+    {
         $store = User::where('username', $request->username)->first();
 
-        if(!$store){
+        if (!$store) {
             abort(404);
         }
 
         return view('pages.cart', compact('store'));
     }
 
-    public function customerInformation(Request $request){
+    public function customerInformation(Request $request)
+    {
         $store = User::where('username', $request->username)->first();
 
-        if(!$store){
+        if (!$store) {
             abort(404);
         }
 
         return view('pages.customer-information', compact('store'));
     }
 
-    public function checkout(Request $request){
+    public function checkout(Request $request)
+    {
         $store = User::where('username', $request->username)->first();
 
-        if(!$store){
+        if (!$store) {
             abort(404);
         }
 
@@ -67,14 +70,38 @@ class TransactionController extends Controller
 
         if ($request->payment_method == 'cash') {
             return redirect()->route('success', ['username' => $store->username, 'order_id' => $transaction->code]);
+        } else {
+            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+
+            \Midtrans\Config::$isProduction = config('midtrans.isProduction');
+
+            \Midtrans\Config::$isSanitized = config('midtrans.isSanitized');
+
+            \Midtrans\Config::$is3ds = config('midtrans.is3ds');
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $transaction->code,
+                    'gross_amount' => $totalPrice,
+                ],
+                'customer_details' => [
+                    'name' => $request->name,
+                    'phone' => $request->phone_number,
+                ],
+            ];
+
+            $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
+
+            return redirect($paymentUrl);
         }
     }
 
-    public function success(Request $request){
+    public function success(Request $request)
+    {
         $transaction = Transaction::where('code', $request->order_id)->first();
         $store = User::where('id', $transaction->user_id)->first();
 
-        if(!$store){
+        if (!$store) {
             abort(404);
         }
 

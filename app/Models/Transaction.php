@@ -30,12 +30,7 @@ class Transaction extends Model
             }
         });
 
-        static::updating(function ($model){
-            if (Auth::user()->role === 'store') {
-                $model->user_id = Auth::user()->id;
-            }
         
-        });
     }
 
     public function user(){
